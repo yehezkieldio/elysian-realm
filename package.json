@@ -3,6 +3,8 @@
     "module": "src/main.ts",
     "type": "module",
     "scripts": {
+        "start": "bun run src/main.ts",
+        "dev": "bun run --watch src/main.ts",
         "format": "biome format --write ./src",
         "format:check": "biome format ./src",
         "lint": "biome check --apply ./src",
@@ -18,6 +20,8 @@
         "typescript": "^5.0.0"
     },
     "dependencies": {
-        "elysia": "^1.0.23"
+        "@t3-oss/env-core": "^0.10.1",
+        "elysia": "^1.0.23",
+        "zod": "^3.23.8"
     }
 }
