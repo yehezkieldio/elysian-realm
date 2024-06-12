@@ -4,7 +4,7 @@
 
 This boilerplate stack is designed to be a starting point for new projects that use Elysia. It includes a basic project structure, configuration files, and a more opinionated setup for development.
 
-Features:
+## Features
 
 - A Docker setup for development.
 - This boilerplate uses [Bun](https://bun.sh/) as the primary runtime.
@@ -16,7 +16,11 @@ Features:
 
 - Clone the repository
 ```bash
-git clone <url>
+# HTTPS
+git clone https://github.com/yehezkieldio/elysia-boilerplate.git
+
+# SSH
+git clone git@github.com:yehezkieldio/elysia-boilerplate.git
 ```
 
 - Install dependencies and start the development server
@@ -24,6 +28,13 @@ git clone <url>
 ```bash
 bun install
 bun dev
+
+# Code quality scripts
+bun lint
+bun lint:unsafe # Apply unsafe fixes
+bun lint:check # Check for lint errors
+bun format
+bun format:check # Check for formatting errors
 ```
 
 ### Docker Setup
