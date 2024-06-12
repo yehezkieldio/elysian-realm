@@ -1,0 +1,13 @@
+{
+    "vscord.app.privacyMode.enable": true,
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "editor.quickSuggestions": {
+        "strings": "on"
+    },
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "typescript.preferences.preferTypeOnlyAutoImports": true
+}
