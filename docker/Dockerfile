@@ -1,5 +1,3 @@
-# TODO: Refactor this production Dockerfile to be suitable for development.
-
 # We use a preconfigured Bun + Node.js image.
 # Bun version: 1.1.13
 # Node.js version: 20.12.2

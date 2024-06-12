@@ -1,0 +1,16 @@
+services:
+  app:
+    container_name: elysia-app
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    env_file: ../.env
+    volumes:
+      - ../src/:/app/src/
+    ports:
+      - '3000:3000'
+    networks:
+      - elysia-boilerplate-network
+networks:
+  elysia-boilerplate-network:
+    driver: bridge

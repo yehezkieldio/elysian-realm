@@ -28,11 +28,20 @@ bun dev
 
 ### Docker Setup
 
+- Start the production setup
 ```bash
-docker-compose --file docker/dev/docker-compose.dev.yml up -d
+docker-compose --file docker/docker-compose.yml up -d
 
 # Run with rebuild images
-docker-compose --file docker/dev/docker-compose.dev.yml up -d --build
+docker-compose --file docker/docker-compose.yml up -d --build
+```
+
+- Start the development setup
+```bash
+docker-compose --file docker/dev/docker-compose.yml up -d
+
+# Run with rebuild images
+docker-compose --file docker/dev/docker-compose.yml up -d --build
 ```
 
 ## License
