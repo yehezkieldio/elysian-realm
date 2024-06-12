@@ -1,3 +1,7 @@
+/**
+ * This is the entry point of your application.
+ */
+
 import Elysia from "elysia";
 
 const api = new Elysia();

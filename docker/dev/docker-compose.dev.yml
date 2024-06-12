@@ -1,0 +1,31 @@
+services:
+  dev-app:
+    container_name: elysia-dev-app
+    build:
+      context: ../../
+      dockerfile: docker/dev/Dockerfile
+    env_file: ../../.env
+    volumes:
+      - ../../src/:/app/src/
+    ports:
+      - '3000:3000'
+    networks:
+      - elysia-boilerplate-network
+  dev-postgresql:
+    container_name: elysia-dev-db
+    image: postgres:latest
+    env_file: ../../.env
+    ports:
+      - '5432:5432'
+    environment:
+        POSTGRES_USER: ${DOCKER_DB_USER}
+        POSTGRES_PASSWORD: ${DOCKER_DB_PASSWORD}
+        POSTGRES_DB: ${DOCKER_DB_NAME}
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    networks:
+      - elysia-boilerplate-network
+    restart: always
+networks:
+  elysia-boilerplate-network:
+    driver: bridge

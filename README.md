@@ -10,6 +10,31 @@ Features:
 - This boilerplate uses [Bun](https://bun.sh/) as the primary runtime.
 - With [Biome](https://biomejs.dev/) as an alternative to ESLint and Prettier combo. Biome is a performant toolchain that includes a fast formatter, linter, etc.
 
+## Getting Started
+
+### Local Setup
+
+- Clone the repository
+```bash
+git clone <url>
+```
+
+- Install dependencies and start the development server
+
+```bash
+bun install
+bun dev
+```
+
+### Docker Setup
+
+```bash
+docker-compose --file docker/dev/docker-compose.dev.yml up -d
+
+# Run with rebuild images
+docker-compose --file docker/dev/docker-compose.dev.yml up -d --build
+```
+
 ## License
 
 This repository is licensed under the MIT License.
