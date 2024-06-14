@@ -60,6 +60,8 @@ docker-compose --file docker/dev/docker-compose.yml up -d --build
 - Start a dedicated PostgreSQL container
 ```bash
 docker-compose --file docker/db/docker-compose.yml up -d
+
+docker-compose --file docker/db/docker-compose.yml down
 ```
 
 ## License

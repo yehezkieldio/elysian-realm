@@ -8,6 +8,7 @@ export const env = createEnv({
      */
     server: {
         DATABASE_URL: z.string().url(),
+        JWT_SECRET: z.string().default("elysia-boilerplate"),
         NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
     },
 

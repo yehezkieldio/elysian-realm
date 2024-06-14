@@ -175,3 +175,4 @@ dist
 .DS_Store
 
 docker/dev/data/
+docker/db/data/
