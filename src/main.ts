@@ -3,8 +3,9 @@
  */
 
 import { auth } from "@/modules/(auth)";
-import { helloWorld } from "@/modules/(hello)/world";
+import { helloWorld } from "@/modules/(helloworld)";
 import { user } from "@/modules/(user)";
+
 import Elysia from "elysia";
 
 const api = new Elysia();
@@ -16,7 +17,6 @@ api.get("/", () => {
 });
 
 api.use(helloWorld);
-
 api.use(user);
 api.use(auth);
 
