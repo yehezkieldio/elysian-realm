@@ -6,62 +6,87 @@ This boilerplate stack is designed to be a starting point for new projects that 
 
 ## Features
 
-- A Docker setup for development.
-- This boilerplate uses [Bun](https://bun.sh/) as the primary runtime.
-- With [Biome](https://biomejs.dev/) as an alternative to ESLint and Prettier combo. Biome is a performant toolchain that includes a fast formatter, linter, etc.
+- **[Elysia](https://elysiajs.com)**: TypeScript framework supercharged by Bun with End-to-End Type Safety, unified type system, and outstanding developer experience
+- **[T3 Env](https://env.t3.gg)**: Framework agnostic validation for type-safe environment variables.
+- **[Drizzle](https://orm.drizzle.team)**: TypeScript ORM that offers type integrity out of the box.
+- **[Biome](https://biomejs.dev)**: A toolchain for web projects, aimed to provide functionalities to maintain them. Biome offers formatter and linter, usable via CLI and LSP.
+- A Docker environment for running the project in a containerized environment.
 
-## Getting Started
+## Initial Setup
 
-### Local Setup
+This setup guide assumes that you have already installed [Bun](https://bun.sh/) on your local machine.
 
-- Clone the repository
+1. Clone the repository to your local machine.
+
 ```bash
 # HTTPS
-git clone https://github.com/yehezkieldio/elysia-boilerplate.git
+git clone https://github.com/yehezkieldio/elysia-boilerplate
 
 # SSH
 git clone git@github.com:yehezkieldio/elysia-boilerplate.git
 ```
 
-- Install dependencies and start the development server
+2. Install the dependencies.
 
 ```bash
 bun install
+```
+
+3. Start the development server.
+
+```bash
 bun dev
 ```
 
-- Run code linting and formatting if needed
+## Code Quality
+
+This boilerplate uses [Biome](https://biomejs.dev/) to enforce code quality and consistency. You can run the following commands to lint and format your code.
+
 ```bash
+# Check for linting errors
+bun lint:check
+
+# Apply linting fixes
 bun lint
-bun lint:unsafe # Apply unsafe fixes
-bun lint:check # Check for lint errors
+
+# Apply unsafe linting fixes
+bun lint:unsafe
+```
+
+```bash
+# Check for formatting errors
+bun format:check
+
+# Format the code
 bun format
-bun format:check # Check for formatting errors
 ```
 
-### Docker Setup
+## Docker Environment
 
-- Start the production setup
+This boilerplate includes a Docker environment for running the project in a containerized environment. You can use the following commands to manage the Docker environment.
+
 ```bash
-docker-compose --file docker/docker-compose.yml up -d
+# Build and run the production compose file
+bun prod:up
 
-# Run with rebuild images
-docker-compose --file docker/docker-compose.yml up -d --build
+# Stop the production compose file
+bun prod:down
 ```
 
-- Start the development setup
 ```bash
-docker-compose --file docker/dev/docker-compose.yml up -d
+# Build and run the development compose file
+bun dev:up
 
-# Run with rebuild images
-docker-compose --file docker/dev/docker-compose.yml up -d --build
+# Stop the development compose file
+bun dev:down
 ```
 
-- Start a dedicated PostgreSQL container
 ```bash
-docker-compose --file docker/db/docker-compose.yml up -d
+# Start the dedicated PostgreSQL compose file
+bun db:up
 
-docker-compose --file docker/db/docker-compose.yml down
+# Stop the dedicated PostgreSQL compose file
+bun db:down
 ```
 
 ## License
