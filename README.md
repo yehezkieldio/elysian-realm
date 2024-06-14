@@ -2,14 +2,19 @@
 
 ✨ Standard boilerplate for curating a new project with Elysia.
 
-This boilerplate stack is designed to be a starting point for new projects that use Elysia. It includes a basic project structure, configuration files, and a more opinionated setup for development.
+This boilerplate stack is designed to be a starting point for new projects that use Elysia, with PostgreSQL as the database and Docker for containerization. It includes a basic project structure, configuration files, and a more opinionated setup for development.
 
 ## Features
+
+Below are the key stack features included in this boilerplate:
 
 - **[T3 Env](https://env.t3.gg)**: Framework agnostic validation for type-safe environment variables.
 - **[Drizzle](https://orm.drizzle.team)**: TypeScript ORM that offers type integrity out of the box.
 - **[Elysia](https://elysiajs.com)**: TypeScript framework supercharged by Bun with End-to-End Type Safety, unified type system, and outstanding developer experience
 - **[Biome](https://biomejs.dev)**: A toolchain for web projects, aimed to provide functionalities to maintain them. Biome offers formatter and linter, usable via CLI and LSP.
+
+With additional features:
+
 - A Docker environment for running the project in a containerized environment.
 
 ## Initial Setup
