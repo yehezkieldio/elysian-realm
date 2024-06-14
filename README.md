@@ -28,8 +28,10 @@ git clone git@github.com:yehezkieldio/elysia-boilerplate.git
 ```bash
 bun install
 bun dev
+```
 
-# Code quality scripts
+- Run code linting and formatting if needed
+```bash
 bun lint
 bun lint:unsafe # Apply unsafe fixes
 bun lint:check # Check for lint errors
@@ -53,6 +55,11 @@ docker-compose --file docker/dev/docker-compose.yml up -d
 
 # Run with rebuild images
 docker-compose --file docker/dev/docker-compose.yml up -d --build
+```
+
+- Start a dedicated PostgreSQL container
+```bash
+docker-compose --file docker/db/docker-compose.yml up -d
 ```
 
 ## License

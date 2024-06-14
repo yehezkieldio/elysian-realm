@@ -1,7 +1,15 @@
 import { createEnv } from "@t3-oss/env-core";
+import { z } from "zod";
 
 export const env = createEnv({
-    server: {},
+    /**
+     * Specify your server-side environment variables schema here. This way you can ensure the app
+     * isn't built with invalid env vars.
+     */
+    server: {
+        DATABASE_URL: z.string().url(),
+        NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+    },
 
     /**
      * The prefix that client-side variables must have. This is enforced both at
