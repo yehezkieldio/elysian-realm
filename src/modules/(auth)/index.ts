@@ -75,38 +75,6 @@ export const auth = new Elysia().group("/auth", (app) =>
                 }),
             },
         )
-        .post(
-            "/signup",
-            async ({ body }) => {
-                const password = await Bun.password.hash(body.password, {
-                    algorithm: "bcrypt",
-                    cost: 10,
-                });
-
-                if (
-                    await db.query.users.findFirst({
-                        where: eq(users.username, body.username),
-                    })
-                ) {
-                    return error(409, "Username already exists");
-                }
-
-                await db.insert(users).values({
-                    username: body.username,
-                    password,
-                });
-
-                return {
-                    message: "Sign-up successfully!",
-                };
-            },
-            {
-                body: t.Object({
-                    username: t.String(),
-                    password: t.String(),
-                }),
-            },
-        )
         .use(authPlugin)
         .post("/refresh", async ({ cookie: { accessToken, refreshToken }, jwt, set }) => {
             if (!refreshToken.value) return error(401, "Refresh token is missing");
