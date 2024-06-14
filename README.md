@@ -15,6 +15,8 @@ Below are the key stack features included in this boilerplate:
 
 With additional features:
 
+- A basic project structure with a modular approach for scalability.
+- An existing JWT authentication setup, with basic user and account (auth) schema.
 - A Docker environment for running the project in a containerized environment.
 
 ## Initial Setup
