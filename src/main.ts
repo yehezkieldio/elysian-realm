@@ -4,7 +4,7 @@
  */
 
 import userModule from "@/modules/(user)";
-import { hasMessage } from "@/util";
+import { hasMessage, isJsonString } from "@/util";
 import { Elysia } from "elysia";
 
 export const api = new Elysia();
@@ -22,7 +22,6 @@ api.onError(({ code, error, set }) => {
      * If the error code is "VALIDATION", then we know that the error is a validation error.
      * If the error code is "NOT_FOUND", then we know that the error is a route not found error.
      */
-
     if (code === "VALIDATION") {
         set.status = "Bad Request";
 
@@ -36,10 +35,26 @@ api.onError(({ code, error, set }) => {
          * @see https://elysiajs.com/validation/schema-type.html#constructor
          *
          */
-        if (JSON.parse(error.message).message?.includes("Unexpected property")) {
+        if (
+            isJsonString(error.message) &&
+            hasMessage(JSON.parse(error.message)) &&
+            JSON.parse(error.message).message?.includes("Unexpected property")
+        ) {
             return JSON.stringify({
                 status: "failure",
                 message: "Invalid request body",
+            });
+        }
+
+        // We catch the error when the request body is missing.
+        if (
+            isJsonString(error.message) &&
+            hasMessage(JSON.parse(error.message)) &&
+            JSON.parse(error.message).message?.includes("Expected object")
+        ) {
+            return JSON.stringify({
+                status: "failure",
+                message: "Missing request body",
             });
         }
 
