@@ -16,7 +16,7 @@ const userModule = new Elysia({ name: "Module.User" });
  * @see https://elysiajs.com/validation/schema-type.html#body
  */
 
-const createUserSchema = t.Object(
+export const createUserSchema = t.Object(
     {
         username: t.String({
             error: "Username is required",
@@ -30,23 +30,30 @@ const createUserSchema = t.Object(
     },
 );
 
-const updateUserSchema = t.Object(
+export const updateUserSchema = t.Object(
     {
         username: t.String({
             error: "Username is required",
         }),
     },
-    {},
+    {
+        additionalProperties: false,
+    },
 );
 
-const updateUserPasswordSchema = t.Object({
-    oldPassword: t.String({
-        error: "Old password is required",
-    }),
-    newPassword: t.String({
-        error: "New password is required",
-    }),
-});
+export const updateUserPasswordSchema = t.Object(
+    {
+        oldPassword: t.String({
+            error: "Old password is required",
+        }),
+        newPassword: t.String({
+            error: "New password is required",
+        }),
+    },
+    {
+        additionalProperties: false,
+    },
+);
 
 /**
  * We asign the db connection to the user module's Elysia context.
