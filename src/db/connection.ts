@@ -1,3 +1,8 @@
+/**
+ * This file is responsible for creating the database connection.
+ * We use Drizzle ORM to create the connection and define the schema.
+ */
+
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 

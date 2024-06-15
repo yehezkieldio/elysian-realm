@@ -1,0 +1,17 @@
+meta {
+  name: Update User
+  type: http
+  seq: 5
+}
+
+put {
+  url: http://localhost:3000/users/sq5evpg0i7ueeb2dgttim43g
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "helloworld"
+  }
+}

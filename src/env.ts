@@ -1,3 +1,8 @@
+/**
+ * We use t3-env to create a strongly-typed environment variable schema.
+ * That way, we can ensure that the app isn't built with invalid env vars.
+ */
+
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
 

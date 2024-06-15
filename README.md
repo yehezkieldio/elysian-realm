@@ -11,13 +11,12 @@ Below are the key stack features included in this boilerplate:
 - **[T3 Env](https://env.t3.gg)**: Framework agnostic validation for type-safe environment variables.
 - **[Drizzle](https://orm.drizzle.team)**: TypeScript ORM that offers type integrity out of the box.
 - **[Elysia](https://elysiajs.com)**: TypeScript framework supercharged by Bun with End-to-End Type Safety, unified type system, and outstanding developer experience
-- **[Biome](https://biomejs.dev)**: A toolchain for web projects, aimed to provide functionalities to maintain them. Biome offers formatter and linter, usable via CLI and LSP.
+- **[Biome](https://biomejs.dev)**: Toolchain for web projects, aimed to provide functionalities to maintain them. Biome offers formatter and linter, usable via CLI and LSP.
 
-With additional features:
+Additional features includes:
 
-- A basic project structure with a modular approach for scalability.
-- An existing JWT authentication setup, with basic user and account (auth) schema.
 - A Docker environment for running the project in a containerized environment.
+- A pre-configured initial Bruno collection for the API endpoints.
 
 ## Initial Setup
 

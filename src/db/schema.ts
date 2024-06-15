@@ -1,3 +1,7 @@
+/**
+ * Overall schema of the database.
+ */
+
 import { cuid2 } from "drizzle-cuid2/postgres";
 import { index, pgTable, pgTableCreator, text, uniqueIndex, varchar } from "drizzle-orm/pg-core";
 
