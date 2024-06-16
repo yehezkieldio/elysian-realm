@@ -15,8 +15,9 @@ Below are the key stack features included in this boilerplate:
 
 Additional features includes:
 
-- A Docker environment for running the project in a containerized environment.
-- A pre-configured initial Bruno collection for the API endpoints.
+- Basic User and Authentication with JWT module.
+- Docker environment for running the project in a containerized environment.
+- Pre-configured initial Bruno collection for the API endpoints.
 
 ## Initial Setup
 
@@ -65,6 +66,11 @@ bun format:check
 
 # Format the code
 bun format
+```
+
+```bash
+# Install lefthook for lint and format commit hooks
+bun lefthook:install
 ```
 
 ## Docker Environment

@@ -7,6 +7,7 @@
         "start": "bun run src/main.ts",
         "dev": "bun run --watch src/main.ts",
         "test": "bun test",
+        "lefthook": "lefthook install",
         "-- CODE QUALITY": "-------------------------",
         "format": "biome format --write ./src",
         "format:check": "biome format ./src",
