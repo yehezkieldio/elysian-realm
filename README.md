@@ -17,7 +17,7 @@ Additional features includes:
 
 - Basic User and Authentication with JWT module.
 - Docker environment for running the project in a containerized environment.
-- Pre-configured initial Bruno collection for the API endpoints.
+- Pre-configured initial [Bruno](https://www.usebruno.com/) collection for the API endpoints.
 
 ## Initial Setup
 
