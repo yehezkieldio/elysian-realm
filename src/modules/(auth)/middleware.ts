@@ -1,3 +1,7 @@
+/**
+ * This middleware is responsible for authenticating users and verifying their access tokens.
+ */
+
 import { db } from "@/db/connection";
 import { accounts, users } from "@/db/schema";
 import { env } from "@/env";
