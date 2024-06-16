@@ -24,3 +24,18 @@ export const users = pgTable(
         usernameUidx: uniqueIndex("user_username_uidx").on(user.username),
     }),
 );
+
+export const accounts = pgTable(
+    "account",
+    {
+        id: cuid2("id").defaultRandom().primaryKey(),
+        userId: cuid2("user_id")
+            .notNull()
+            .references(() => users.id),
+        refreshToken: text("refresh_token").notNull(),
+        accessToken: text("access_token").notNull(),
+    },
+    (account) => ({
+        userIdUidx: uniqueIndex("account_user_id_uidx").on(account.userId),
+    }),
+);

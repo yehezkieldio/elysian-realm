@@ -3,6 +3,7 @@
  * This file is responsible for bootstrapping the application.
  */
 
+import authModule from "@/modules/(auth)";
 import userModule from "@/modules/(user)";
 import { hasMessage, isJsonString } from "@/util";
 import { Elysia } from "elysia";
@@ -104,6 +105,7 @@ api.mapResponse(({ response, set }) => {
  * Below, we import the available modules and attach them to the API.
  */
 
+api.use(authModule);
 api.use(userModule);
 
 api.listen(3000, () => {

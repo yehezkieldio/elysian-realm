@@ -4,6 +4,7 @@
 
 import { db } from "@/db/connection";
 import { users } from "@/db/schema";
+import { authMiddleware } from "@/modules/(auth)/middleware";
 import { eq } from "drizzle-orm";
 import Elysia, { InternalServerError, t } from "elysia";
 
@@ -91,6 +92,8 @@ userModule.decorate("db", db).group("/users", (app) =>
 
             return user;
         })
+        // check for authenticated user
+        .use(authMiddleware)
         // create user
         .post(
             "/",
@@ -128,9 +131,12 @@ userModule.decorate("db", db).group("/users", (app) =>
 
                 if (!user) throw new InternalServerError("User not found");
 
-                await db.update(users).set({
-                    username: body.username,
-                });
+                await db
+                    .update(users)
+                    .set({
+                        username: body.username,
+                    })
+                    .where(eq(users.id, params.id));
 
                 return {
                     message: "User updated",
@@ -158,9 +164,12 @@ userModule.decorate("db", db).group("/users", (app) =>
                     cost: 10,
                 });
 
-                await db.update(users).set({
-                    password: newPassword,
-                });
+                await db
+                    .update(users)
+                    .set({
+                        password: newPassword,
+                    })
+                    .where(eq(users.id, params.id));
 
                 return {
                     message: "Password updated",

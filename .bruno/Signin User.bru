@@ -1,0 +1,18 @@
+meta {
+  name: Signin User
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:3000/auth/signin
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "admin",
+    "password": "admin"
+  }
+}
