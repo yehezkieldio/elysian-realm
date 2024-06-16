@@ -5,8 +5,8 @@
 import { db } from "@/db/connection";
 import { accounts, users } from "@/db/schema";
 import { env } from "@/env";
-import { ACCESS_TOKEN_EXPIRATION, REFRESH_TOKEN_EXPIRATION } from "@/modules/(auth)/constant";
-import { generateUniqueIdentifier, getExpTimestamp } from "@/util";
+import { authMiddleware } from "@/modules/(auth)/middleware";
+import { authUtil } from "@/modules/(auth)/util";
 import jwt from "@elysiajs/jwt";
 import { eq } from "drizzle-orm";
 import Elysia, { InternalServerError, t } from "elysia";
@@ -27,149 +27,154 @@ export const signInSchema = t.Object(
     },
 );
 
-authModule.decorate("db", db).group("/auth", (app) =>
-    app
-        .use(
-            jwt({
-                name: "jwt",
-                secret: env.JWT_SECRET,
-            }),
-        )
-        // sign in
-        .post(
-            "/signin",
-            async ({ body, jwt, cookie: { accessToken, refreshToken } }) => {
+authModule
+    .decorate("util", authUtil)
+    .decorate("db", db)
+    .group("/auth", (app) =>
+        app
+            .use(
+                jwt({
+                    name: "jwt",
+                    secret: env.JWT_SECRET,
+                }),
+            )
+            // sign in
+            .post(
+                "/signin",
+                async ({ body, jwt, cookie: { accessToken, refreshToken }, util }) => {
+                    const user = await db.query.users.findFirst({
+                        where: eq(users.username, body.username),
+                    });
+
+                    if (!user) throw new InternalServerError("User not found");
+
+                    const passwordMatch = await Bun.password.verify(body.password, user.password, "bcrypt");
+                    if (!passwordMatch) throw new InternalServerError("Invalid password");
+
+                    const initialAccessToken = await jwt.sign({
+                        sub: user.id,
+                        iat: Math.floor(Date.now() / 1000),
+                        exp: util.getExpTimestamp(util.ACCESS_TOKEN_EXPIRATION),
+                    });
+
+                    accessToken.set({
+                        value: initialAccessToken,
+                        httpOnly: true,
+                        maxAge: util.ACCESS_TOKEN_EXPIRATION,
+                        path: "/",
+                    });
+
+                    const initialRefreshToken = await jwt.sign({
+                        sub: user.id,
+                        exp: util.getExpTimestamp(util.REFRESH_TOKEN_EXPIRATION),
+                        iat: Math.floor(Date.now() / 1000),
+                        jti: util.generateUniqueIdentifier(),
+                    });
+
+                    refreshToken.set({
+                        value: initialRefreshToken,
+                        httpOnly: true,
+                        maxAge: util.REFRESH_TOKEN_EXPIRATION,
+                        path: "/",
+                    });
+
+                    const account = await db.query.accounts.findFirst({
+                        where: eq(accounts.userId, user.id),
+                    });
+
+                    if (account) {
+                        await db
+                            .update(accounts)
+                            .set({
+                                refreshToken: initialRefreshToken,
+                                accessToken: initialAccessToken,
+                            })
+                            .where(eq(accounts.userId, user.id));
+                    } else {
+                        await db.insert(accounts).values({
+                            userId: user.id,
+                            refreshToken: initialRefreshToken,
+                            accessToken: initialAccessToken,
+                        });
+                    }
+
+                    return {
+                        message: "Sign in successful",
+                        accessToken: initialAccessToken,
+                        refreshToken: initialRefreshToken,
+                    };
+                },
+                {
+                    body: signInSchema,
+                },
+            )
+            // check for authenticated user
+            .use(authMiddleware)
+            // refresh token
+            .post("/refresh", async ({ cookie: { accessToken, refreshToken }, jwt, util }) => {
+                if (!refreshToken.value) throw new InternalServerError("Refresh token not found");
+
+                const jwtPayload = await jwt.verify(refreshToken.value);
+                if (!jwtPayload) throw new InternalServerError("Invalid refresh token");
+
                 const user = await db.query.users.findFirst({
-                    where: eq(users.username, body.username),
+                    where: eq(users.id, jwtPayload.sub as string),
                 });
 
                 if (!user) throw new InternalServerError("User not found");
 
-                const passwordMatch = await Bun.password.verify(body.password, user.password, "bcrypt");
-                if (!passwordMatch) throw new InternalServerError("Invalid password");
-
-                const initialAccessToken = await jwt.sign({
+                const newAccessToken = await jwt.sign({
                     sub: user.id,
                     iat: Math.floor(Date.now() / 1000),
-                    exp: getExpTimestamp(ACCESS_TOKEN_EXPIRATION),
+                    exp: util.getExpTimestamp(util.ACCESS_TOKEN_EXPIRATION),
                 });
 
                 accessToken.set({
-                    value: initialAccessToken,
+                    value: newAccessToken,
                     httpOnly: true,
-                    maxAge: ACCESS_TOKEN_EXPIRATION,
+                    maxAge: util.ACCESS_TOKEN_EXPIRATION,
                     path: "/",
                 });
 
-                const initialRefreshToken = await jwt.sign({
+                const newRefreshToken = await jwt.sign({
                     sub: user.id,
-                    exp: getExpTimestamp(REFRESH_TOKEN_EXPIRATION),
+                    exp: util.getExpTimestamp(util.REFRESH_TOKEN_EXPIRATION),
                     iat: Math.floor(Date.now() / 1000),
-                    jti: generateUniqueIdentifier(),
+                    jti: util.generateUniqueIdentifier(),
                 });
 
                 refreshToken.set({
-                    value: initialRefreshToken,
+                    value: newRefreshToken,
                     httpOnly: true,
-                    maxAge: REFRESH_TOKEN_EXPIRATION,
+                    maxAge: util.REFRESH_TOKEN_EXPIRATION,
                     path: "/",
                 });
 
-                const account = await db.query.accounts.findFirst({
-                    where: eq(accounts.userId, user.id),
-                });
-
-                if (account) {
-                    await db
-                        .update(accounts)
-                        .set({
-                            refreshToken: initialRefreshToken,
-                            accessToken: initialAccessToken,
-                        })
-                        .where(eq(accounts.userId, user.id));
-                } else {
-                    await db.insert(accounts).values({
-                        userId: user.id,
-                        refreshToken: initialRefreshToken,
-                        accessToken: initialAccessToken,
-                    });
-                }
+                await db
+                    .update(accounts)
+                    .set({
+                        refreshToken: newRefreshToken,
+                        accessToken: newAccessToken,
+                    })
+                    .where(eq(accounts.userId, user.id));
 
                 return {
-                    message: "Sign in successful",
-                    accessToken: initialAccessToken,
-                    refreshToken: initialRefreshToken,
-                };
-            },
-            {
-                body: signInSchema,
-            },
-        )
-        // refresh token
-        .post("/refresh", async ({ cookie: { accessToken, refreshToken }, jwt }) => {
-            if (!refreshToken.value) throw new InternalServerError("Refresh token not found");
-
-            const jwtPayload = await jwt.verify(refreshToken.value);
-            if (!jwtPayload) throw new InternalServerError("Invalid refresh token");
-
-            const user = await db.query.users.findFirst({
-                where: eq(users.id, jwtPayload.sub as string),
-            });
-
-            if (!user) throw new InternalServerError("User not found");
-
-            const newAccessToken = await jwt.sign({
-                sub: user.id,
-                iat: Math.floor(Date.now() / 1000),
-                exp: getExpTimestamp(ACCESS_TOKEN_EXPIRATION),
-            });
-
-            accessToken.set({
-                value: newAccessToken,
-                httpOnly: true,
-                maxAge: ACCESS_TOKEN_EXPIRATION,
-                path: "/",
-            });
-
-            const newRefreshToken = await jwt.sign({
-                sub: user.id,
-                exp: getExpTimestamp(REFRESH_TOKEN_EXPIRATION),
-                iat: Math.floor(Date.now() / 1000),
-                jti: generateUniqueIdentifier(),
-            });
-
-            refreshToken.set({
-                value: newRefreshToken,
-                httpOnly: true,
-                maxAge: REFRESH_TOKEN_EXPIRATION,
-                path: "/",
-            });
-
-            await db
-                .update(accounts)
-                .set({
-                    refreshToken: newRefreshToken,
+                    message: "Token refreshed",
                     accessToken: newAccessToken,
-                })
-                .where(eq(accounts.userId, user.id));
+                    refreshToken: newRefreshToken,
+                };
+            })
+            // sign out
+            .post("/signout", async ({ cookie: { accessToken, refreshToken }, set }) => {
+                accessToken.remove();
+                refreshToken.remove();
 
-            return {
-                message: "Token refreshed",
-                accessToken: newAccessToken,
-                refreshToken: newRefreshToken,
-            };
-        })
-        // sign out
-        .post("/signout", async ({ cookie: { accessToken, refreshToken }, set }) => {
-            accessToken.remove();
-            refreshToken.remove();
+                await db.delete(accounts).where(eq(accounts.accessToken, accessToken.value));
 
-            await db.delete(accounts).where(eq(accounts.accessToken, accessToken.value));
-
-            return {
-                message: "Sign out successful",
-            };
-        }),
-);
+                return {
+                    message: "Sign out successful",
+                };
+            }),
+    );
 
 export default authModule;
