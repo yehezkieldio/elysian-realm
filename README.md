@@ -19,6 +19,10 @@ Additional features includes:
 - Docker environment for running the project in a containerized environment.
 - Pre-configured initial [Bruno](https://www.usebruno.com/) collection for the API endpoints.
 
+With other features on other branches:
+
+- **[feature/redis](https://github.com/yehezkieldio/elysia-boilerplate/tree/feature/redis)** - Redis caching strategy integration in the project.
+
 ## Initial Setup
 
 This setup guide assumes that you have already installed [Bun](https://bun.sh/) on your local machine.
