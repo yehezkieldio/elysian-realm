@@ -1,6 +1,6 @@
 {
-    "name": "elysia-boilerplate",
-    "description": "Standard boilerplate for curating a new project with Elysia.",
+    "name": "elysian-realm",
+    "description": " My opinionated boilerplate for curating a new project with Elysia.",
     "module": "src/main.ts",
     "type": "module",
     "scripts": {
