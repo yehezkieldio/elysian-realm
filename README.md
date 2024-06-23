@@ -1,6 +1,6 @@
-# elysia-boilerplate
+# elysian-realm
 
-✨ Standard boilerplate for curating a new project with Elysia.
+✨ My opinionated boilerplate for curating a new project with Elysia. 
 
 This boilerplate stack is designed to be a starting point for new projects that use Elysia, with PostgreSQL as the database and Docker for containerization. It includes a basic project structure, configuration files, and a more opinionated setup for development.
 
@@ -18,10 +18,6 @@ Additional features includes:
 - Basic User and Authentication with JWT module.
 - Docker environment for running the project in a containerized environment.
 - Pre-configured initial [Bruno](https://www.usebruno.com/) collection for the API endpoints.
-
-With other features on other branches:
-
-- **[feature/redis](https://github.com/yehezkieldio/elysia-boilerplate/tree/feature/redis)** - Redis caching strategy integration in the project.
 
 ## Initial Setup
 
