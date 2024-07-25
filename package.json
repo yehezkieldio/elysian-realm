@@ -41,7 +41,7 @@
         "@t3-oss/env-core": "^0.10.1",
         "drizzle-cuid2": "^1.0.5",
         "drizzle-orm": "^0.31.2",
-        "elysia": "^1.0.23",
+        "elysia": "^1.1.4",
         "postgres": "^3.4.4",
         "zod": "^3.23.8"
     }
